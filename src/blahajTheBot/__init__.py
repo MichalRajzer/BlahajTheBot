@@ -1,32 +1,30 @@
 import os
 from dotenv import load_dotenv
-import discord
-from discord.ext import commands
+import nextcord
+from nextcord.ext import commands
 import logging
 
-
-class Blahaj(commands.Bot):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.log_handler = handler
-
-    async def on_ready(self):
-        logging.info("Bot is ready!")
-
-    async def on_disconnect(self):
-        logging.warning("Bot has disconnected!")
+from basic import Basic
 
 
-if __name__ == '__main__':
-    load_dotenv()
+logger = logging.getLogger('nextcord')
+logger.setLevel(logging.INFO)
+handler = logging.FileHandler(
+    filename='nextcord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter(
+    '%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
 
-    intents = discord.Intents.default()
-    intents.members = True
-    intents.message_content = True
-    intents.presences = True
+logging.basicConfig(level=logging.INFO)
 
-    handler = logging.FileHandler(
-        filename='discord.log', encoding='utf-8', mode='w')
+load_dotenv()
 
-    bot = Blahaj("/", intents=intents, log_handler=handler)
-    bot.run(os.getenv('BOT_TOKEN'))
+intents = nextcord.Intents.default()
+intents.message_content = True  # Needed for automod
+bot = commands.Bot(intents=intents,)
+
+
+bot.add_cog(Basic(bot))
+
+
+bot.run(os.getenv("BOT_TOKEN"))
