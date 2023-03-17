@@ -7,6 +7,7 @@ import logging
 from basic import Basic
 from mod import Mod
 from setup import Setup
+from music import Music
 
 # Load .env
 load_dotenv()
@@ -35,6 +36,7 @@ bot = commands.Bot(intents=intents,)
 bot.add_cog(Basic(bot))
 bot.add_cog(Mod(bot))
 bot.add_cog(Setup(bot))
+bot.add_cog(Music(bot))
 
 # Run bot
 if __name__ == '__main__':
