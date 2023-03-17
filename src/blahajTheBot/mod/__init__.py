@@ -2,21 +2,23 @@ import logging
 from nextcord.ext import commands
 import nextcord
 import asyncio
+from db import Configs_DB
 
 
 class Mod(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.db = Configs_DB()
 
     @nextcord.slash_command(description="Use this to verify yourself!")
     async def verify(self, interaction: nextcord.Interaction) -> None:
-        view = RuleVerifier()
+        view = RuleVerifier(db=self.db)
         await interaction.response.send_message("Please verify yourself!", view=view)
 
 
 class RuleVerifierDropdown(nextcord.ui.Select):
-    def __init__(self):
-
+    def __init__(self, db: Configs_DB):
+        self.db = db
         # Set the options that will be presented inside the dropdown
         options = [
             nextcord.SelectOption(
@@ -43,8 +45,10 @@ class RuleVerifierDropdown(nextcord.ui.Select):
             await asyncio.sleep(5)
             await interaction.user.kick(reason="You didn't agree to the rules >:(")
         else:
+            verifiedRoleID = self.db.get_config(
+                interaction.guild.id, 'verifiedRoleID')
             await interaction.user.add_roles(
-                interaction.guild.get_role(1045758940404777011))  # TODO Hardcoded role ID, will be changed later
+                interaction.guild.get_role(verifiedRoleID))
             await interaction.response.send_message("Welcome aboard!")
 
 
