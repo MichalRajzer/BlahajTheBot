@@ -1,7 +1,6 @@
 import logging
 from nextcord.ext import commands
 import nextcord
-import asyncio
 from db import Configs_DB
 from typing import Dict, List
 
