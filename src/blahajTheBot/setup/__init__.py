@@ -103,9 +103,9 @@ class ChannelSelector(nextcord.ui.ChannelSelect):
         resp = self.db.set_config(interaction.guild.id,
                                   'memberCountChannel', self.values[0].id)
         if resp:
-            await interaction.response.edit_message("Channel set!")
+            await interaction.response.send_message("Channel set!", ephemeral=True)
         else:
-            await interaction.response.edit_message("Something went wrong")
+            await interaction.response.send_message("Something went wrong :((", ephemeral=True)
 
 
 class RoleSelector(nextcord.ui.RoleSelect):
@@ -117,9 +117,9 @@ class RoleSelector(nextcord.ui.RoleSelect):
         resp = self.db.set_config(interaction.guild.id,
                                   'verifiedRoleID', self.values[0].id)
         if resp:
-            await interaction.response.edit_message("Role set!")
+            await interaction.response.send_message("Role set!", ephemeral=True)
         else:
-            await interaction.response.edit_message("Something went wrong")
+            await interaction.response.send_message("Something went wrong :((", ephemeral=True)
 
 
 class GenericSelector(nextcord.ui.Select):
